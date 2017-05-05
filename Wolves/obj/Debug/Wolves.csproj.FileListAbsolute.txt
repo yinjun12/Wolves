@@ -1,0 +1,13 @@
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.csprojResolveAssemblyReference.cache
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.Form1.resources
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.Properties.Resources.resources
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.csproj.GenerateResource.Cache
+F:\VS2017\Wolves\Wolves\bin\Debug\Wolves.exe.config
+F:\VS2017\Wolves\Wolves\bin\Debug\Wolves.exe
+F:\VS2017\Wolves\Wolves\bin\Debug\Wolves.pdb
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.exe
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.pdb
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.Nine.resources
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.twelve.resources
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.Win.resources
+F:\VS2017\Wolves\Wolves\obj\Debug\Wolves.twelveWin.resources
