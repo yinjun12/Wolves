@@ -24,7 +24,7 @@ namespace Wolves
 			if (Games.isWolvesWin)
 			{
 				label1.Text = "狼人阵营胜利！";
-				Nine.winForm.BackColor = Color.Black;
+				twelve.winForm.BackColor = Color.Black;
 				label1.ForeColor = Color.White;
 				label2.ForeColor = Color.White;
 				groupBox1.ForeColor = Color.White;
@@ -33,12 +33,17 @@ namespace Wolves
 			else
 			{
 				label1.Text = "好人阵营胜利！";
-				Nine.winForm.BackColor = Color.White;
+				twelve.winForm.BackColor = Color.White;
 				label1.ForeColor = Color.Red;
 				label2.ForeColor = Color.Black;
 				groupBox1.ForeColor = Color.Black;
 				Games.playSound(@"F:\VS2017\Wolves\Sound\end2.wav");
 			}
+		}
+
+		private void label1_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

@@ -34,7 +34,6 @@ namespace Wolves
 		public static bool isWolvesWin = true;//狼人赢还是好人赢
 		public int nuwuUseAntidoteDay = 0;//女巫用解药的天数
 		public int GuardNumber = -1;//守卫守护的序号,-1代表空守
-		public String nightInformation = "";//晚上信息
 		public int []deadNumberInNight = new int[] { -1,-1};//第一个代表当晚被狼人人杀的编号，第二个代表当晚被毒的编号
 		private void setWolvesIdentity()
 		{
@@ -194,6 +193,33 @@ namespace Wolves
 					break;
 			}
 			return index;
+		}
+		public String getNightInformation()
+		{
+			String returnedString = "";
+			if (deadNumberInNight[0] == -1 && deadNumberInNight[1] == -1)//平安夜
+			{
+				returnedString = "◆【昨晚平安夜，无人死亡】\n";
+			}
+			else if (deadNumberInNight[0] == -1 || deadNumberInNight[1] == -1)
+			{//只刀或只毒，即只死亡一个
+				int deadInformation = deadNumberInNight[0] == -1 ? deadNumberInNight[1] : deadNumberInNight[0];
+				returnedString = String.Format("◆【昨晚死亡的是{0}号玩家】\n", deadInformation + 1);
+				if (days == 1 && deadNumberInNight[0] != -1)
+					returnedString += String.Format("◆请{0}号玩家发表遗言\n",deadNumberInNight[0] + 1);
+			}
+			else
+			{
+				if (deadNumberInNight[0] == deadNumberInNight[1])//刀和毒给了同一个人
+					returnedString = String.Format("◆【昨晚死亡的是{0}号玩家】\n", deadNumberInNight[0] + 1);
+				else//刀和毒给了不同人
+				{
+					returnedString = String.Format("◆【昨晚死亡的是{0}号玩家,{1}号玩家】\n", deadNumberInNight[0] + 1, deadNumberInNight[1] + 1);
+				}
+				if (days == 1 && deadNumberInNight[0] != -1)//第一天夜晚死亡可以发表遗言
+					returnedString += String.Format("◆请{0}号玩家发表遗言\n", deadNumberInNight[0] + 1);
+			}
+			return returnedString;
 		}
 	}
 	static class Program

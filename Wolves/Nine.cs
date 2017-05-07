@@ -137,7 +137,7 @@ namespace Wolves
 
 		private void button1_Click(object sender, EventArgs e)
 		{ //点击进入天黑，为天黑相关操作进行准备;
-			Games.playSound(@"F:\VS2017\Wolves\Sound\tianhei.wav");
+			//Games.playSound(@"F:\VS2017\Wolves\Sound\tianhei.wav");
 			wolvesGame.isNight = true;
 			if (wolvesGame.judgeGamesIsOver())//首先判断游戏是否结束,具体是谁赢，在Win窗体里的加载函数中判断
 			{
@@ -169,7 +169,7 @@ namespace Wolves
 			RadioButton[] allRadioButton = new RadioButton[10];
 			allRadioButton = getTenAllRadioButton();
 			int deadNumber = getCheckedRadioIndex(allRadioButton);
-			if (deadNumber < 0 || deadNumber > Games.playerNumbers)
+			if (deadNumber < 0 )
 			{
 				label11.Text = "◆【没有选择!】\n请选择一项!";
 				return;
@@ -183,7 +183,8 @@ namespace Wolves
 				}
 				radioVisibleChange(true);
 				radioTextChange("是否公投TA");
-				radioButton10.Visible = false;
+				radioButton10.Visible = true;
+				radioButton10.Text = "狼人自爆";
 				button5.Visible = true;
 				button5.Text = "白天出局";
 				label11.Text = "◆请所有活着玩家发言，并在发言过后进行投票！\n";
@@ -196,7 +197,7 @@ namespace Wolves
 			radioVisibleChange(false);
 			radioButton10.Visible = false;
 			int deadNumberInDay = getCheckedRadioIndex(allRadioButton);
-			if (deadNumberInDay < 0 || deadNumberInDay > Games.playerNumbers)
+			if (deadNumberInDay < 0 )
 			{
 				label11.Text = "◆【没有选择!】\n请选择一项!";
 				return;
@@ -218,6 +219,7 @@ namespace Wolves
 				}
 			}
 			printHeadImage();
+			radioCheckedChange(false);
 		}
 
 		private void button2_Click(object sender, EventArgs e)
@@ -249,7 +251,6 @@ namespace Wolves
 						if (deadNumberInNightByLangren !=wolvesGame. findIndexByIndentity('N')
 						|| wolvesGame.days == 1 && deadNumberInNightByLangren ==wolvesGame. findIndexByIndentity('N'))//只有在第一夜能自救
 						{
-							wolvesGame.nightInformation += String.Format("{0}号玩家 ", deadNumberInNightByLangren + 1);
 							allRadioButton[deadNumberInNightByLangren].Visible = true;
 							allRadioButton[deadNumberInNightByLangren].Text = "是否救TA";
 						}
@@ -299,7 +300,6 @@ namespace Wolves
 					wolvesGame.allPlayerInformation[wolvesGame. findIndexByIndentity('N')].ability = Games.NONABILITY;
 				wolvesGame.allPlayerInformation[wolvesGame.deadNumberInNight[0]].isDeath = 0;
 				wolvesGame.deadNumberInNight[0] = -1;//昨晚没有死人
-				wolvesGame.nightInformation = "";
 				wolvesGame.nuwuUseAntidoteDay = wolvesGame.days;//女巫使用解药的天数
 			}
 			//配置女巫使用毒药的环境
@@ -374,7 +374,7 @@ namespace Wolves
 
 		private void button4_Click(object sender, EventArgs e)
 		{
-			Games.playSound(@"F:\VS2017\Wolves\Sound\tianliangle.wav");
+			//Games.playSound(@"F:\VS2017\Wolves\Sound\tianliangle.wav");
 			if (wolvesGame.judgeGamesIsOver())//首先判断游戏是否结束,具体是谁赢，在Win窗体里的加载函数中判断
 			{
 				winForm.ShowDialog();
@@ -384,29 +384,7 @@ namespace Wolves
 			wolvesGame.isNight = false;//进入白天
 			changeColorInDays();
 			label10TextChange();
-			if (wolvesGame.deadNumberInNight[0] == -1 && wolvesGame.deadNumberInNight[1] == -1)//平安夜
-			{
-				label11.Text = "◆【昨晚平安夜，无人死亡】\n";
-			}
-			else if (wolvesGame.deadNumberInNight[0] == -1 || wolvesGame.deadNumberInNight[1] == -1)
-			{//只刀或只毒，即只死亡一个
-				int deadInformation = wolvesGame.deadNumberInNight[0] == -1 ? wolvesGame.deadNumberInNight[1] : wolvesGame.deadNumberInNight[0];
-				label11.Text = String.Format("◆【昨晚死亡的是{0}号玩家】\n", deadInformation+1);
-				if (wolvesGame.days == 1 && wolvesGame.deadNumberInNight[0] != -1)
-					label11.Text += String.Format("◆请{0}号玩家发表遗言\n", wolvesGame.deadNumberInNight[0]+1);
-			}
-			else
-			{
-				if (wolvesGame.deadNumberInNight[0] == wolvesGame.deadNumberInNight[1])//刀和毒给了同一个人
-					label11.Text = String.Format("◆【昨晚死亡的是{0}号玩家】\n", wolvesGame.deadNumberInNight[0] + 1);
-				else//刀和毒给了不同人
-				{
-					label11.Text = String.Format("◆【昨晚死亡的是{0}号玩家,{1}号玩家】\n", wolvesGame.deadNumberInNight[0] + 1, wolvesGame.deadNumberInNight[1] + 1);
-				}
-				if (wolvesGame.days == 1 && wolvesGame.deadNumberInNight[0] != -1)//第一天夜晚死亡可以发表遗言
-					label11.Text += String.Format("◆请{0}号玩家发表遗言\n", wolvesGame.deadNumberInNight[0] + 1);
-
-			}
+			label11.Text = wolvesGame.getNightInformation();
 			if (wolvesGame.deadNumberInNight[0] ==wolvesGame. findIndexByIndentity('H'))//死亡的是猎人，白天发动技能
 			{
 				radioVisibleChange(true);
@@ -422,7 +400,8 @@ namespace Wolves
 				label11.Text += String.Format("\n◆请所有活着玩家发言，并在发言过后进行投票！");
 				radioVisibleChange(true);
 				radioTextChange("是否公投TA");
-				radioButton10.Visible = false;
+				radioButton10.Visible = true;
+				radioButton10.Text = "狼人自爆";
 				button5.Visible = true;
 				button5.Text = "白天出局";
 			}

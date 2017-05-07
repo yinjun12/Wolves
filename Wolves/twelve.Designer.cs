@@ -75,6 +75,8 @@
 			this.button6 = new System.Windows.Forms.Button();
 			this.button7 = new System.Windows.Forms.Button();
 			this.button8 = new System.Windows.Forms.Button();
+			this.button9 = new System.Windows.Forms.Button();
+			this.button10 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -170,6 +172,9 @@
 			// 
 			// pictureBox3
 			// 
+			this.pictureBox3.BackColor = System.Drawing.SystemColors.Control;
+			this.pictureBox3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Arrow;
 			this.pictureBox3.Location = new System.Drawing.Point(76, 83);
 			this.pictureBox3.Name = "pictureBox3";
 			this.pictureBox3.Size = new System.Drawing.Size(127, 130);
@@ -547,11 +552,32 @@
 			this.button8.UseVisualStyleBackColor = true;
 			this.button8.Click += new System.EventHandler(this.button8_Click);
 			// 
+			// button9
+			// 
+			this.button9.Location = new System.Drawing.Point(963, 503);
+			this.button9.Name = "button9";
+			this.button9.Size = new System.Drawing.Size(100, 36);
+			this.button9.TabIndex = 72;
+			this.button9.Text = "button9";
+			this.button9.UseVisualStyleBackColor = true;
+			this.button9.Click += new System.EventHandler(this.button9_Click);
+			// 
+			// button10
+			// 
+			this.button10.Location = new System.Drawing.Point(1005, 523);
+			this.button10.Name = "button10";
+			this.button10.Size = new System.Drawing.Size(100, 36);
+			this.button10.TabIndex = 73;
+			this.button10.Text = "button10";
+			this.button10.UseVisualStyleBackColor = true;
+			// 
 			// twelve
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1164, 640);
+			this.Controls.Add(this.button10);
+			this.Controls.Add(this.button9);
 			this.Controls.Add(this.button8);
 			this.Controls.Add(this.button7);
 			this.Controls.Add(this.button6);
@@ -668,5 +694,7 @@
 		private System.Windows.Forms.Button button6;
 		private System.Windows.Forms.Button button7;
 		private System.Windows.Forms.Button button8;
+		private System.Windows.Forms.Button button9;
+		private System.Windows.Forms.Button button10;
 	}
 }
