@@ -77,6 +77,7 @@
 			this.button8 = new System.Windows.Forms.Button();
 			this.button9 = new System.Windows.Forms.Button();
 			this.button10 = new System.Windows.Forms.Button();
+			this.button11 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -570,12 +571,24 @@
 			this.button10.TabIndex = 73;
 			this.button10.Text = "button10";
 			this.button10.UseVisualStyleBackColor = true;
+			this.button10.Click += new System.EventHandler(this.button10_Click);
+			// 
+			// button11
+			// 
+			this.button11.Location = new System.Drawing.Point(931, 38);
+			this.button11.Name = "button11";
+			this.button11.Size = new System.Drawing.Size(100, 42);
+			this.button11.TabIndex = 74;
+			this.button11.Text = "狼人自爆";
+			this.button11.UseVisualStyleBackColor = true;
+			this.button11.Click += new System.EventHandler(this.button11_Click);
 			// 
 			// twelve
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1164, 640);
+			this.Controls.Add(this.button11);
 			this.Controls.Add(this.button10);
 			this.Controls.Add(this.button9);
 			this.Controls.Add(this.button8);
@@ -696,5 +709,6 @@
 		private System.Windows.Forms.Button button8;
 		private System.Windows.Forms.Button button9;
 		private System.Windows.Forms.Button button10;
+		private System.Windows.Forms.Button button11;
 	}
 }

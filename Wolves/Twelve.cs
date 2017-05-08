@@ -25,6 +25,25 @@ namespace Wolves
 			for (int i = 0; i < pic.Length; i++)
 				pic[i].Image = Image.FromFile(twelveGames.getWhichImage(i));
 		}
+		private void markPolice()
+		{
+			PictureBox[] allPicture = { pictureBox1,pictureBox2
+				,pictureBox3,pictureBox4,pictureBox5,pictureBox6,pictureBox7,pictureBox8,pictureBox9
+				,pictureBox10,pictureBox11,pictureBox12};
+			for (int i = 0; i < Games.playerNumbers; i++)
+			{
+				if (twelveGames.allPlayerInformation[i].isSergeant)
+				{
+					allPicture[i].Size = new Size(160, 130);
+					allPicture[i].BackColor = Color.Red;
+				}
+				else
+				{
+					allPicture[i].Size = new Size(127, 130);
+					allPicture[i].BackColor = Color.Black;
+				}
+			}
+		}
 		private void labelForeColorChange(Color co)
 		{
 			Label[] allLabel = new Label[] { label1, label2, label3, label4,
@@ -112,6 +131,14 @@ namespace Wolves
 				label13Str += "白天";
 			label13.Text = label13Str;
 		}
+		private bool isTheDeathPolice()
+		{
+			if (twelveGames.deadNumberInNight[0] >= 0 && twelveGames.deadNumberInNight[0] < Games.playerNumbers
+			   && twelveGames.allPlayerInformation[twelveGames.deadNumberInNight[0]].isSergeant)
+				return true;
+			else
+				return false;
+		}
 		private void twelve_Load(object sender, EventArgs e)
 		{
 			twelveGames = new Games();
@@ -130,16 +157,31 @@ namespace Wolves
 			button8.Visible = false;
 			button9.Visible = false;
 			button10.Visible = false;
+			button11.Visible = false;
 			radioVisibleChange(false);
 			radioButton13.Visible = false;
 			label14.Visible = false;
 			changeColorInDays();
 		}
+		private void IsMovePoliceId(int i)//准备移交警徽，i是警长序号
+		{
+			RadioButton[] allRadioButton = new RadioButton[13];
+			allRadioButton = getTenAllRadioButton();
+			label14.Text = label14.Text + "◆【警长死亡！】请选择移交警徽或撕掉警徽！";
+			radioVisibleChange(true);
+			radioTextChange("警徽交给TA");
+			allRadioButton[i].Visible = false;
+			radioButton13.Visible = true;
+			radioButton13.Text = "撕掉警徽";
+			button10.Visible = true;
+			button10.Text = "移交警徽";
 
+		}
 		private void button1_Click(object sender, EventArgs e)//天黑
 		{
 			//Games.playSound(@"F:\VS2017\Wolves\Sound\tianhei.wav");
 			twelveGames.isNight = true;
+			button11.Visible = false;//天黑，自爆按钮消失
 			if (twelveGames.judgeGamesIsOver())//首先判断游戏是否结束,具体是谁赢，在Win窗体里的加载函数中判断
 			{
 		
@@ -379,7 +421,6 @@ namespace Wolves
 		{
 			RadioButton[] allRadioButton = new RadioButton[13];
 			allRadioButton = getTenAllRadioButton();
-			label14.Text = twelveGames.getNightInformation();//输出夜晚信息
 			int deadNumber = twelveGames.deadNumberInNight[0];
 			if (twelveGames.deadNumberInNight[0] == twelveGames.findIndexByIndentity('H'))//死亡的是猎人，白天发动技能
 			{
@@ -396,8 +437,7 @@ namespace Wolves
 				label14.Text += String.Format("\n◆请所有活着玩家发言，并在发言过后进行投票！（警长指定从警左或警右）\n");
 				radioVisibleChange(true);
 				radioTextChange("是否公投TA");
-				radioButton13.Visible = true;
-				radioButton13.Text = "狼人自爆";
+				radioButton13.Visible = false;
 				button8.Visible = true;
 				button8.Text = "白天出局";
 			}
@@ -414,6 +454,7 @@ namespace Wolves
 				return;
 			}
 			twelveGames.isNight = false;//进入白天
+			button11.Visible = true;
 			changeColorInDays();
 			label13TextChange();
 			int deadNumber = twelveGames.deadNumberInNight[0];
@@ -423,35 +464,36 @@ namespace Wolves
 				button9.Visible = true;
 				button9.Text = "竞选警长";
 				radioVisibleChange(true);
-				if(deadNumber>=0&&deadNumber<Games.playerNumbers)//有人死亡
+				if (deadNumber >= 0 && deadNumber < Games.playerNumbers)//有人死亡
 					allRadioButton[deadNumber].Visible = true;//第一夜死亡也可以竞选警长
 				radioTextChange("选TA为警长");
 				label14.Text = "◆【开始竞选警长！】";
-				radioButton13.Visible = true;
-				radioButton13.Text = "狼人自爆";
+				radioButton13.Visible = false;
 			}
-			1:在三处移交警徽：【竞选警长后，天亮了，白天投票】。
-			2：白天投票要有狼人自爆！自爆之后进入天黑，且自爆的狼人死亡
-			//else if(deadNumber >= 0 && deadNumber < Games.playerNumbers&&twelveGames.allPlayerInformation[deadNumber].isSergeant==true)
-			//{//有人死亡
-			//	radioVisibleChange(true);
-			//	radioTextChange("警徽交给TA");
-			//	allRadioButton[].Visible = false;
-			//	radioButton13.Visible = true;
-			//	radioButton13.Text = "撕掉警徽";
-			//	button10.Visible = true;
-			//	button10.Text = "移交警徽";
-
-			//}
+			//1:在三处移交警徽：【竞选警长后，天亮了，白天投票】。
+			//2：白天投票要有狼人自爆！自爆之后进入天黑，且自爆的狼人死亡
+			else if (isTheDeathPolice())
+			{
+				label14.Text = twelveGames.getNightInformation();
+				IsMovePoliceId(twelveGames.deadNumberInNight[0]);
+			}
 			else
+			{
+				label14.Text = twelveGames.getNightInformation();
 				setNightToDayEnvironment();
+			}
 			button7.Visible = false;
 			printHeadImage();
 			radioCheckedChange(false);
 		}
-
+		！！出现白天投出猎人，且猎人是警长的情况下，技能发动和移交警徽顺序出现问题
 		private void button8_Click(object sender, EventArgs e)//白天出局
 		{
+			if (button10.Visible == true)
+			{
+				label14.Text = "◆【请先移交警徽！】";
+				return;
+			}
 			RadioButton[] allRadioButton = new RadioButton[13];
 			allRadioButton = getTenAllRadioButton();
 			int deadNumber = getCheckedRadioIndex(allRadioButton);
@@ -460,16 +502,7 @@ namespace Wolves
 				label14.Text = "◆【没有选择!】\n请选择一项!";
 				return;
 			}
-			//if (twelveGames.allPlayerInformation[deadNumber].isSergeant == true)
-			//{
-			//	radioVisibleChange(true);
-			//	radioTextChange("警徽交给TA");
-			//	allRadioButton[deadNumber].Visible = false;
-			//	radioButton13.Visible = true;
-			//	radioButton13.Text = "撕掉警徽";
-			//	button10.Visible = true;
-			//	button10.Text = "移交警徽";
-			//}
+
 			if (twelveGames.deadNumberInNight[0] == twelveGames.findIndexByIndentity('H'))//如果晚上死的是猎人，发动技能按钮不消失
 			{
 				twelveGames.deadNumberInNight[0] = -1;//不会在下次点击按钮再进入这个事件
@@ -477,44 +510,52 @@ namespace Wolves
 				{
 					twelveGames.allPlayerInformation[deadNumber].isDeath = 1;
 				}
-				radioVisibleChange(true);
-				radioTextChange("是否公投TA");
-				radioButton13.Visible = true;
-				radioButton13.Text = "狼人自爆";
-				button8.Visible = true;
-				button8.Text = "白天出局";
 				label14.Text = "◆请所有活着玩家发言，并在发言过后进行投票！\n";
 				printHeadImage();
+
+				radioVisibleChange(true);
+				radioTextChange("是否公投TA");
+				radioButton13.Visible = false;
+				button8.Visible = true;
+				button8.Text = "白天出局";
 				radioCheckedChange(false);
-				return;
 
 			}//不是猎人，则正常投票
-			button8.Visible = false;
-			button1.Visible = true;
-			radioVisibleChange(false);
-			radioButton13.Visible = false;
-			if (deadNumber >= 0 && deadNumber < Games.playerNumbers)
+			else
 			{
-				twelveGames.allPlayerInformation[deadNumber].isDeath = 2;
-				label14.Text = String.Format("◆{0}号玩家请发表遗言\n", deadNumber + 1);
-				if (twelveGames.allPlayerInformation[deadNumber].identity == 'H')//猎人白天被投，发动技能后按钮不消失
+				button8.Visible = false;
+				button1.Visible = true;
+				radioVisibleChange(false);
+				radioButton13.Visible = false;
+				if (deadNumber >= 0 && deadNumber < Games.playerNumbers)
 				{
-					radioVisibleChange(true);
-					label14.Text = label14.Text + String.Format("◆【技能触发】:{0}号玩家是否发动技能？", deadNumber + 1);
-					button8.Visible = true;//白天死亡按钮不消失，天黑按钮也不出现
-					button1.Visible = false;
-					button8.Text = "是否发动技能";
-					radioButton13.Visible = true;
-					radioButton13.Text = "不发动技能";
-					allRadioButton[deadNumber].Visible = false;
+					twelveGames.allPlayerInformation[deadNumber].isDeath = 2;
+					label14.Text = String.Format("◆{0}号玩家请发表遗言\n", deadNumber + 1);
+					if (twelveGames.allPlayerInformation[deadNumber].identity == 'H')//猎人白天被投，发动技能后按钮不消失
+					{
+						radioVisibleChange(true);
+						label14.Text = label14.Text + String.Format("◆【技能触发】:{0}号玩家是否发动技能？", deadNumber + 1);
+						button8.Visible = true;//白天死亡按钮不消失，天黑按钮也不出现
+						button1.Visible = false;
+						button8.Text = "是否发动技能";
+						radioTextChange("是否对TA发动技能");
+						radioButton13.Visible = true;
+						radioButton13.Text = "不发动技能";
+						allRadioButton[deadNumber].Visible = false;
+					}
 				}
+				printHeadImage();
+				if (deadNumber >= 0 && deadNumber < Games.playerNumbers && twelveGames.allPlayerInformation[deadNumber].isSergeant)
+				{
+					IsMovePoliceId(deadNumber);
+				}
+				radioCheckedChange(false);
 			}
-			printHeadImage();
-			radioCheckedChange(false);
 		}
 
 		private void button9_Click(object sender, EventArgs e)//警长竞选
 		{
+			button9.Visible = false;
 			RadioButton []allRadioButton = new RadioButton[13];
 			allRadioButton = getTenAllRadioButton();
 			int checkedNumber = getCheckedRadioIndex(allRadioButton);
@@ -525,26 +566,82 @@ namespace Wolves
 			}
 			if (checkedNumber >= 0 && checkedNumber < Games.playerNumbers)
 			{
-				PictureBox[] allPicture = { pictureBox1,pictureBox2
-				,pictureBox3,pictureBox4,pictureBox5,pictureBox6,pictureBox7,pictureBox8,pictureBox9
-				,pictureBox10,pictureBox11,pictureBox12};
 				twelveGames.allPlayerInformation[checkedNumber].isSergeant = true;
-				allPicture[checkedNumber].Size = new Size(160, 130);
-				allPicture[checkedNumber].BackColor = Color.Red;
+				markPolice();
 			}
-			else if (checkedNumber == Games.playerNumbers)
+			if (isTheDeathPolice())//死亡的是警长
 			{
-				radioVisibleChange(false);
-				radioButton13.Visible = false;
-				label14.Text = "◆直接进入天黑！";
-				button1.Visible = true;
+				label14.Text = twelveGames.getNightInformation();
+				IsMovePoliceId(twelveGames.deadNumberInNight[0]);
+			}
+			else
+			{
+				label14.Text = twelveGames.getNightInformation();
+				setNightToDayEnvironment();//为白天配置环境
 				button9.Visible = false;
+				button8.Visible = true;
+				radioCheckedChange(false);
+			}
+		}
+
+		private void button11_Click(object sender, EventArgs e)//狼人自爆
+		{
+			RadioButton[] allRadioButton = new RadioButton[13];
+			allRadioButton = getTenAllRadioButton();
+			int checkedNumber = getCheckedRadioIndex(allRadioButton);
+			if (checkedNumber < 0)
+			{
+				label14.Text = "◆【没有选择!】\n请选择一项!";
 				return;
 			}
-			setNightToDayEnvironment();//为白天配置环境
+			if (twelveGames.allPlayerInformation[checkedNumber].identity != 'L'
+				&&twelveGames.allPlayerInformation[checkedNumber].isDeath==0)
+			{
+				label14.Text = "◆【请选择要自爆的狼人!】";
+				radioCheckedChange(false);
+				return;
+			}
+			radioVisibleChange(false);
+			radioButton13.Visible = false;
+			label14.Text = "◆【狼人自爆!】\n◆直接进入天黑！";
+			twelveGames.allPlayerInformation[checkedNumber].isDeath = 2;
+			printHeadImage();
+			button1.Visible = true;
+			button2.Visible = false;
+			button3.Visible = false;
+			button4.Visible = false;
+			button5.Visible = false;
+			button6.Visible = false;
+			button7.Visible = false;
+			button8.Visible = false;
 			button9.Visible = false;
-			button8.Visible = true;
+			button10.Visible = false;
+			button11.Visible = false;
+		}
+
+		private void button10_Click(object sender, EventArgs e)//撕警徽
+		{
+			for (int i = 0; i < Games.playerNumbers; i++)
+			{
+				if (twelveGames.allPlayerInformation[i].isSergeant)
+					twelveGames.allPlayerInformation[i].isSergeant = false;
+			}//撕掉警徽
+			RadioButton[] allRadioButton = new RadioButton[13];
+			allRadioButton = getTenAllRadioButton();
+			int checkedNumber = getCheckedRadioIndex(allRadioButton);
+			if (checkedNumber < 0)
+			{
+				label14.Text = "◆【没有选择!】\n请选择一项!";
+				return;
+			}//移交警徽
+			if (checkedNumber >= 0 && checkedNumber < Games.playerNumbers)
+			{
+				twelveGames.allPlayerInformation[checkedNumber].isSergeant = true;
+			}
+			button10.Visible = false;
 			radioCheckedChange(false);
+			markPolice();
+			setNightToDayEnvironment();
 		}
 	}
 }
